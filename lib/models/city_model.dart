@@ -1,0 +1,54 @@
+class CityModel {
+  final int id;
+  final String name;
+  final double latitude;
+  final double longitude;
+  final String? country;
+  final String? admin1;
+  final String countryCode;
+
+  CityModel({
+    required this.id,
+    required this.name,
+    required this.latitude,
+    required this.longitude,
+    this.country,
+    this.admin1,
+    required this.countryCode,
+  });
+
+  // Factory constructor for Geocoding API response
+  factory CityModel.fromJson(Map<String, dynamic> json) {
+    return CityModel(
+      id: (json['id'] as num).toInt(),
+      name: json['name'] as String,
+      latitude: (json['latitude'] as num).toDouble(),
+      longitude: (json['longitude'] as num).toDouble(),
+      country: json['country'] as String?,
+      admin1: json['admin1'] as String?,
+      countryCode: (json['country_code'] as String?) ?? '',
+    );
+  }
+
+  // Convert to JSON for local persistence of the selected city
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'latitude': latitude,
+      'longitude': longitude,
+      'country': country,
+      'admin1': admin1,
+      'countryCode': countryCode,
+    };
+  }
+
+  // Display location subtitle (e.g. "Tehran Province, Iran")
+  String get locationLabel {
+    final parts = [
+      admin1,
+      country,
+    ].whereType<String>().where((p) => p.isNotEmpty).toList();
+    return parts.join(', ');
+  }
+}
