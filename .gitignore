@@ -46,3 +46,14 @@ app.*.map.json
 
 # Widget Preview related
 .widget_preview/
+
+# Security & Secrets (Required for Public Repos)
+.env
+.env.*
+!.env.example
+local.properties
+key.properties
+*.jks
+*.keystore
+*.pem
+*.p12
