@@ -58,3 +58,4 @@ key.properties
 *.pem
 *.p12
 .artifacts/
+AGENTS.md

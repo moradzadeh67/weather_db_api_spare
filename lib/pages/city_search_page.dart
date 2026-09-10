@@ -183,7 +183,7 @@ class _CitySearchPageState extends State<CitySearchPage> {
             return ListTile(
               leading: const Icon(Icons.place_outlined, color: Colors.white54),
               title: Text(
-                '${city.name}${city.countryCode.isNotEmpty ? ' (${city.countryCode})' : ''}',
+                '${city.name} ${city.countryFlag} (${city.countryCode})',
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 16,

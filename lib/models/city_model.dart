@@ -54,4 +54,13 @@ class CityModel {
     ].whereType<String>().where((p) => p.isNotEmpty).toList();
     return parts.join(', ');
   }
+
+  // Convert ISO country code (e.g. "IR", "DE") to emoji flag
+  String get countryFlag {
+    if (countryCode.length != 2) return '';
+    final String upperCode = countryCode.toUpperCase();
+    final int firstChar = upperCode.codeUnitAt(0) + 127397;
+    final int secondChar = upperCode.codeUnitAt(1) + 127397;
+    return String.fromCharCode(firstChar) + String.fromCharCode(secondChar);
+  }
 }

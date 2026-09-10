@@ -68,6 +68,7 @@ class _WeatherPageState extends State<WeatherPage> {
       case WeatherStatus.success:
         return _WeatherView(
           weather: notifier.weather!,
+          countryFlag: notifier.selectedCity?.countryFlag ?? '',
           isOffline: notifier.isOffline,
           onRefresh: notifier.fetchWeather,
           onSearch: _openSearch,
@@ -171,12 +172,14 @@ class _ErrorView extends StatelessWidget {
 // ===================== Weather View =====================
 class _WeatherView extends StatelessWidget {
   final WeatherModel weather;
+  final String countryFlag;
   final bool isOffline;
   final VoidCallback onRefresh;
   final VoidCallback onSearch;
 
   const _WeatherView({
     required this.weather,
+    required this.countryFlag,
     required this.isOffline,
     required this.onRefresh,
     required this.onSearch,
@@ -302,13 +305,13 @@ class _WeatherView extends StatelessWidget {
 
               // City Name & Last Updated
               Text(
-                weather.cityName.toUpperCase(),
+                '${weather.cityName} $countryFlag'.toUpperCase(),
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  letterSpacing: 2,
+                  fontSize: 28, // افزایش سایز از ۱۸ به ۲۸ برای خوانایی بیشتر
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 1.5,
                 ),
               ),
               const SizedBox(height: 6),
