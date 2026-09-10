@@ -15,18 +15,18 @@ This project was developed following the **SSD (Specification-Driven Development
 5.  **C**omponents: Building a responsive and intuitive user interface.
 
 ## ✨ Key Features
-- 🌐 **Real-time Data**: Integrated with the **Open-Meteo API** for high-accuracy global weather data.
+- 🌐 **Real-time Data**: Integrated with the **Open-Meteo API** (No API Key required).
 - 💾 **Offline-First**: Automatic local storage of weather data and the selected city for instant access without internet.
-- 🏳️ **Country Identity**: Visual identification of cities using dynamic emoji flags in search results.
+- 🏳️ **Country Identity**: Visual identification of cities using dynamic emoji flags in search results and main view.
 - 🔍 **Smart Search**: Custom relevance filtering that prioritizes exact matches and removes irrelevant results.
 - 📱 **Modern UI**: A glassmorphic design featuring adaptive backgrounds that change based on current weather conditions.
 
 ## 🛠️ Tech Stack
 - **Flutter & Dart**
-- **State Management**: **Provider** (`ChangeNotifier` + `ListenableBuilder`) for clean and reactive UI updates.
+- **State Management**: **ChangeNotifier** + **ListenableBuilder** for lightweight and reactive UI updates.
 - **API Communication**: **http** for efficient REST API calls.
-- **Local Persistence**: **Custom JSON Storage** (via `path_provider`) to maintain state across app restarts.
-- **Connectivity**: **connectivity_plus** for real-time network status monitoring.
+- **Local Persistence**: **Custom JSON Storage** (via `path_provider`) for lightweight data caching.
+- **Connectivity**: **connectivity_plus** for real-time monitoring of network status.
 
 ## 🚀 How to Run
 1.  **Clone the Repository**:
@@ -41,13 +41,9 @@ This project was developed following the **SSD (Specification-Driven Development
     ```bash
     flutter run
     ```
-*Note: This application uses the Open-Meteo free tier and does not require any API keys to run.*
 
 ## 📂 Project Structure
 - `lib/models/`: Robust data structures with full JSON serialization.
 - `lib/services/`: Specialized services for API calls and local storage.
 - `lib/state/`: Centralized business logic and UI state notifications.
 - `lib/pages/`: Modular UI screens and reusable widgets.
-
----
-*Built with ❤️ using SSD/SPARC standards.*
