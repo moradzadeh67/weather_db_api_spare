@@ -6,6 +6,7 @@ class CityModel {
   final String? country;
   final String? admin1;
   final String countryCode;
+  final int population;
 
   CityModel({
     required this.id,
@@ -15,6 +16,7 @@ class CityModel {
     this.country,
     this.admin1,
     required this.countryCode,
+    this.population = 0,
   });
 
   // Factory constructor for Geocoding API response
@@ -27,6 +29,7 @@ class CityModel {
       country: json['country'] as String?,
       admin1: json['admin1'] as String?,
       countryCode: (json['country_code'] as String?) ?? '',
+      population: (json['population'] as num?)?.toInt() ?? 0,
     );
   }
 
@@ -39,7 +42,7 @@ class CityModel {
       'longitude': longitude,
       'country': country,
       'admin1': admin1,
-      'countryCode': countryCode,
+      'country_code': countryCode,
     };
   }
 

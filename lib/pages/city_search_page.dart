@@ -23,11 +23,7 @@ class _CitySearchPageState extends State<CitySearchPage> {
   @override
   void initState() {
     super.initState();
-    // Reset search state after the transition starts, to avoid notifying
-    // listeners while the widget tree is still building.
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _notifier.resetSearch();
-    });
+    _notifier.resetSearch();
   }
 
   @override
@@ -39,6 +35,9 @@ class _CitySearchPageState extends State<CitySearchPage> {
 
   void _onQueryChanged(String query) {
     _debounce?.cancel();
+    if (query.trim().isNotEmpty) {
+      _notifier.startSearch(); // Show loader immediately
+    }
     _debounce = Timer(const Duration(milliseconds: 400), () {
       _notifier.searchCities(query);
     });
@@ -114,7 +113,9 @@ class _CitySearchPageState extends State<CitySearchPage> {
       builder: (context, _) {
         // Loading state
         if (_notifier.isSearching) {
-          return const Center(child: CircularProgressIndicator(color: Colors.white70));
+          return const Center(
+            child: CircularProgressIndicator(color: Colors.white70),
+          );
         }
 
         // Error state
@@ -148,7 +149,11 @@ class _CitySearchPageState extends State<CitySearchPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.location_city, size: 56, color: Colors.white24),
+                  const Icon(
+                    Icons.location_city,
+                    size: 56,
+                    color: Colors.white24,
+                  ),
                   const SizedBox(height: 12),
                   Text(
                     _controller.text.trim().isEmpty
@@ -167,14 +172,18 @@ class _CitySearchPageState extends State<CitySearchPage> {
         return ListView.separated(
           padding: const EdgeInsets.symmetric(vertical: 8),
           itemCount: results.length,
-          separatorBuilder: (_, _) =>
-              const Divider(height: 1, color: Colors.white12, indent: 16, endIndent: 16),
+          separatorBuilder: (_, _) => const Divider(
+            height: 1,
+            color: Colors.white12,
+            indent: 16,
+            endIndent: 16,
+          ),
           itemBuilder: (context, index) {
             final city = results[index];
             return ListTile(
               leading: const Icon(Icons.place_outlined, color: Colors.white54),
               title: Text(
-                city.name,
+                '${city.name}${city.countryCode.isNotEmpty ? ' (${city.countryCode})' : ''}',
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 16,
@@ -185,7 +194,10 @@ class _CitySearchPageState extends State<CitySearchPage> {
                   ? null
                   : Text(
                       city.locationLabel,
-                      style: const TextStyle(color: Colors.white54, fontSize: 13),
+                      style: const TextStyle(
+                        color: Colors.white54,
+                        fontSize: 13,
+                      ),
                     ),
               trailing: const Icon(Icons.chevron_right, color: Colors.white38),
               onTap: () => _onCitySelected(city),

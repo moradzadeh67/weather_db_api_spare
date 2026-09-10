@@ -10,7 +10,8 @@ class ApiService {
   static const String _baseUrl = 'https://api.open-meteo.com/v1/forecast';
 
   // Base URL for Open-Meteo Geocoding API (city search)
-  static const String _geoBaseUrl = 'https://geocoding-api.open-meteo.com/v1/search';
+  static const String _geoBaseUrl =
+      'https://geocoding-api.open-meteo.com/v1/search';
 
   // Default coordinates for Tehran, Iran
   static const double _defaultLat = 35.6892;
@@ -33,7 +34,9 @@ class ApiService {
         final Map<String, dynamic> data = jsonDecode(response.body);
         return WeatherModel.fromApiJson(data, cityName);
       } else {
-        throw Exception('Server error with status code: ${response.statusCode}');
+        throw Exception(
+          'Server error with status code: ${response.statusCode}',
+        );
       }
     } catch (e) {
       throw Exception('Failed to connect to weather service: $e');
@@ -43,7 +46,7 @@ class ApiService {
   // Search for cities by name using Open-Meteo Geocoding API
   Future<List<CityModel>> searchCities(String query) async {
     final url = Uri.parse(
-      '$_geoBaseUrl?name=${Uri.encodeQueryComponent(query)}&count=8&language=en&format=json',
+      '$_geoBaseUrl?name=${Uri.encodeQueryComponent(query)}&count=25&format=json',
     );
 
     try {
@@ -52,9 +55,13 @@ class ApiService {
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = jsonDecode(response.body);
         final results = (data['results'] as List<dynamic>?) ?? [];
-        return results.map((e) => CityModel.fromJson(e as Map<String, dynamic>)).toList();
+        return results
+            .map((e) => CityModel.fromJson(e as Map<String, dynamic>))
+            .toList();
       } else {
-        throw Exception('Server error with status code: ${response.statusCode}');
+        throw Exception(
+          'Server error with status code: ${response.statusCode}',
+        );
       }
     } catch (e) {
       throw Exception('Failed to search cities: $e');

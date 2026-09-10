@@ -57,3 +57,4 @@ key.properties
 *.keystore
 *.pem
 *.p12
+.artifacts/

@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 
 import '../models/city_model.dart';
 import '../models/weather_model.dart';
@@ -12,7 +13,11 @@ class WeatherNotifier extends ChangeNotifier {
   final ApiService _apiService;
   final StorageService _storageService;
 
-  WeatherNotifier({required this._apiService, required this._storageService});
+  WeatherNotifier({
+    required ApiService apiService,
+    required StorageService storageService,
+  }) : _apiService = apiService,
+       _storageService = storageService;
 
   WeatherStatus _status = WeatherStatus.loading;
   WeatherModel? _weather;
@@ -39,16 +44,37 @@ class WeatherNotifier extends ChangeNotifier {
   Future<void> initialize() async {
     _selectedCity = await _storageService.loadSelectedCity();
     _weather = await _storageService.loadWeather();
+
+    // If we have cached weather, show it immediately while fetching fresh data in background
+    if (_weather != null) {
+      _status = WeatherStatus.success;
+      _isOffline = true; // Temporary status until background fetch finishes
+      notifyListeners();
+    }
+
     await fetchWeather();
   }
 
   // Fetch weather data from internet (for selected city, or default Tehran)
   Future<void> fetchWeather() async {
-    _status = WeatherStatus.loading;
-    _errorMessage = null;
-    notifyListeners();
+    // Only show loading if we don't have ANY data (initial state or city change)
+    if (_weather == null || _status == WeatherStatus.failure) {
+      _status = WeatherStatus.loading;
+      _errorMessage = null;
+      notifyListeners();
+    }
 
     try {
+      // Check for internet connection before making the request
+      final connectivityResult = await Connectivity().checkConnectivity();
+      final hasNoInternet = connectivityResult.contains(
+        ConnectivityResult.none,
+      );
+
+      if (hasNoInternet) {
+        throw Exception('No internet connection available.');
+      }
+
       final city = _selectedCity;
       final freshWeather = city == null
           ? await _apiService.fetchWeather()
@@ -60,6 +86,7 @@ class WeatherNotifier extends ChangeNotifier {
       _weather = freshWeather;
       _isOffline = false;
       _status = WeatherStatus.success;
+      _errorMessage = null;
 
       // Save fresh data to local storage for offline fallback
       await _storageService.saveWeather(freshWeather);
@@ -73,9 +100,19 @@ class WeatherNotifier extends ChangeNotifier {
         // No cache and no internet -> show failure state
         _isOffline = false;
         _status = WeatherStatus.failure;
-        _errorMessage = 'Failed to load weather data. Please try again.';
+        _errorMessage = e.toString().contains('internet')
+            ? 'No internet connection. Please check your network.'
+            : 'Failed to load weather data. Please try again.';
       }
     }
+    notifyListeners();
+  }
+
+  // Set the searching state immediately (to show loader and clear old errors)
+  void startSearch() {
+    _isSearching = true;
+    _searchError = null;
+    _searchResults = [];
     notifyListeners();
   }
 
@@ -89,12 +126,23 @@ class WeatherNotifier extends ChangeNotifier {
       return;
     }
 
+    // Ensure state is correctly set if startSearch wasn't called manually
     _isSearching = true;
     _searchError = null;
     notifyListeners();
 
     try {
-      _searchResults = await _apiService.searchCities(query);
+      final rawResults = await _apiService.searchCities(query);
+      final lowercaseQuery = query.trim().toLowerCase();
+
+      // Filter results to only keep those containing the query in name, country, or admin1
+      _searchResults = rawResults.where((city) {
+        return city.name.toLowerCase().contains(lowercaseQuery) ||
+            (city.country != null &&
+                city.country!.toLowerCase().contains(lowercaseQuery)) ||
+            (city.admin1 != null &&
+                city.admin1!.toLowerCase().contains(lowercaseQuery));
+      }).toList();
     } catch (e) {
       _searchResults = [];
       _searchError = 'Search failed. Please check your connection.';

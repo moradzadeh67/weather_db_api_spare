@@ -77,9 +77,11 @@ class _WeatherPageState extends State<WeatherPage> {
 
   // Open the city search page
   void _openSearch() {
-    Navigator.of(
-      context,
-    ).push(MaterialPageRoute(builder: (_) => CitySearchPage(notifier: widget.notifier)));
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => CitySearchPage(notifier: widget.notifier),
+      ),
+    );
   }
 }
 
@@ -233,6 +235,8 @@ class _WeatherView extends StatelessWidget {
     // the system bars while the background keeps painting under them.
     final media = MediaQuery.of(context);
     return Container(
+      width: double.infinity,
+      height: double.infinity,
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,
@@ -272,7 +276,10 @@ class _WeatherView extends StatelessWidget {
               // Offline Warning Banner
               if (isOffline) ...[
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 10,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.black26,
                     borderRadius: BorderRadius.circular(12),
@@ -353,7 +360,10 @@ class _WeatherView extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
                     foregroundColor: const Color(0xFF0B1D33),
-                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 24,
+                      vertical: 12,
+                    ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
@@ -435,7 +445,11 @@ class _InfoCard extends StatelessWidget {
   final String label;
   final String value;
 
-  const _InfoCard({required this.icon, required this.label, required this.value});
+  const _InfoCard({
+    required this.icon,
+    required this.label,
+    required this.value,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -444,7 +458,7 @@ class _InfoCard extends StatelessWidget {
       decoration: BoxDecoration(
         // Dark translucent surface -> contrasts well with bright orange
         // as well as with dark night gradients.
-        color: Colors.black.withValues(alpha: 0.28),
+        color: Colors.black.withValues(alpha: 0.38),
         borderRadius: BorderRadius.circular(18),
         border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
       ),

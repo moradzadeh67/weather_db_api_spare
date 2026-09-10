@@ -99,11 +99,31 @@ Before final delivery, the agent must verify the following:
 - For larger (`Senior`) projects, additional stages (`Testing`, `CI/CD`) must be considered.
 - Always review the checklist before execution.
 
+## 5. Language Display Rules (RTL Formatting)
+
+To ensure correct right-to-left (RTL) display in the chat interface:
+- [ ] **Strict Language Separation**: Each line must contain words from ONLY ONE language (either Persian or English).
+- [ ] **English in Persian Text**: When a Persian response contains English words, paths, or code symbols, move the English content to a NEW LINE using a double line break.
+- [ ] **Resume Persian**: After the English line, resume the Persian text on another NEW LINE.
+- [ ] **Code Blocks Exception**: This rule does NOT apply to code blocks. All code must remain in a single code block, and Persian explanations related to specific lines should be added as comments within that same line of code.
+- [ ] **Consistency**: This rule applies to all responses, summaries, and walkthroughs.
+
 ## Security & Public Repository Rules
+- [ ] **No Unauthorized Pushes**: NEVER push code to GitHub, GitLab, or any remote repository without explicit permission from the user.
+## Security & Public Repository Rules
+- [ ] **No Unauthorized Pushes**: NEVER push code to GitHub, GitLab, or any remote repository without explicit permission from the user.
 - **Never commit sensitive data** (API keys, passwords, tokens, `.env` files, or any credentials) to the repository.
 - This project will be published as a **public repository**, so all secrets must be stored externally and explicitly ignored by Git via `.gitignore`.
 - Use clear placeholders like `YOUR_API_KEY_HERE` in code and configuration templates.
 - Always verify `.gitignore` is correctly configured before the first push. If a secret is accidentally committed, revoke it immediately and clean the Git history.
+
+## 6. Task Execution Protocol (Approval Workflow)
+
+To ensure the user is always informed and in control of project changes:
+- [ ] **Plan First**: Before modifying any code or project settings, the Agent must provide a detailed explanation of the proposed changes.
+- [ ] **Explicit Approval**: The Agent must WAIT for explicit user approval (e.g., "Proceed", "Approved", or clicking the Proceed button) before starting execution.
+- [ ] **Change Impact**: The explanation must include which files will be affected and what the impact on the app's behavior will be.
+- [ ] **No Guessing**: If a request is ambiguous, the Agent must ask for clarification instead of making assumptions that lead to code changes.
 
 ---
 
