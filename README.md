@@ -23,10 +23,10 @@ This project was developed following the **SSD (Specification-Driven Development
 
 ## 🛠️ Tech Stack
 - **Flutter & Dart**
-- **Provider**: For clean and reactive state management.
-- **http**: For efficient REST API communication.
-- **path_provider**: For local JSON-based data persistence.
-- **connectivity_plus**: For real-time monitoring of network status.
+- **State Management**: **Provider** (`ChangeNotifier` + `ListenableBuilder`) for clean and reactive UI updates.
+- **API Communication**: **http** for efficient REST API calls.
+- **Local Persistence**: **Custom JSON Storage** (via `path_provider`) to maintain state across app restarts.
+- **Connectivity**: **connectivity_plus** for real-time network status monitoring.
 
 ## 🚀 How to Run
 1.  **Clone the Repository**:
