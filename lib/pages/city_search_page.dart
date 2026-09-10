@@ -71,7 +71,12 @@ class _CitySearchPageState extends State<CitySearchPage> {
           children: [
             // Search Input
             Padding(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+              padding: EdgeInsets.fromLTRB(
+                16,
+                MediaQuery.of(context).size.height * 0.01,
+                16,
+                MediaQuery.of(context).size.height * 0.01,
+              ),
               child: TextField(
                 controller: _controller,
                 autofocus: true,
@@ -182,8 +187,19 @@ class _CitySearchPageState extends State<CitySearchPage> {
             final city = results[index];
             return ListTile(
               leading: const Icon(Icons.place_outlined, color: Colors.white54),
-              title: Text(
-                '${city.name} ${city.countryFlag} (${city.countryCode})',
+              title: Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(text: city.name),
+                    TextSpan(
+                      text: ' ${city.countryFlag}',
+                      style: const TextStyle(
+                        fontSize: 18.5,
+                      ), // ~15% larger than 16
+                    ),
+                    TextSpan(text: ' (${city.countryCode})'),
+                  ],
+                ),
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 16,

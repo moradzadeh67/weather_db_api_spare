@@ -274,8 +274,7 @@ class _WeatherView extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 8),
-
+              SizedBox(height: media.size.height * 0.005), // Pulled up
               // Offline Warning Banner
               if (isOffline) ...[
                 Container(
@@ -300,59 +299,82 @@ class _WeatherView extends StatelessWidget {
                     ],
                   ),
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: media.size.height * 0.005), // Pulled up
               ],
 
               // City Name & Last Updated
-              Text(
-                '${weather.cityName} $countryFlag'.toUpperCase(),
+              Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(text: '${weather.cityName} '.toUpperCase()),
+                    TextSpan(
+                      text: countryFlag,
+                      style: TextStyle(
+                        fontSize:
+                            (media.size.width * 0.07).clamp(20.0, 28.0) * 1.15,
+                      ),
+                    ),
+                  ],
+                ),
                 textAlign: TextAlign.center,
-                style: const TextStyle(
+                style: TextStyle(
                   color: Colors.white,
-                  fontSize: 28, // افزایش سایز از ۱۸ به ۲۸ برای خوانایی بیشتر
+                  fontSize: (media.size.width * 0.07).clamp(20.0, 28.0),
                   fontWeight: FontWeight.bold,
                   letterSpacing: 1.5,
                 ),
               ),
-              const SizedBox(height: 6),
+              const SizedBox(height: 4),
               Text(
                 'Last update: ${_formatTime(weather.lastUpdated)}',
                 textAlign: TextAlign.center,
-                style: const TextStyle(color: Colors.white70, fontSize: 13),
+                style: TextStyle(
+                  color: Colors.white70,
+                  fontSize: (media.size.width * 0.045).clamp(
+                    16.0,
+                    20.0,
+                  ), // Responsive & Larger
+                ),
               ),
 
-              const SizedBox(height: 40),
-
+              SizedBox(height: media.size.height * 0.005), // Pulled up
               // Main Weather Display
               Text(
                 weather.weatherEmoji,
                 textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 88),
+                style: TextStyle(
+                  fontSize: (media.size.height * 0.075).clamp(
+                    40.0,
+                    65.0,
+                  ), // More compact
+                ),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 2),
               Text(
                 '${weather.temperature.round()}°C',
                 textAlign: TextAlign.center,
-                style: const TextStyle(
+                style: TextStyle(
                   color: Colors.white,
-                  fontSize: 72,
+                  fontSize: (media.size.height * 0.055).clamp(
+                    32.0,
+                    52.0,
+                  ), // More compact
                   fontWeight: FontWeight.w300,
                   height: 1.0,
                 ),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 2),
               Text(
                 weather.weatherCondition,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   color: Colors.white,
-                  fontSize: 20,
+                  fontSize: 18,
                   fontWeight: FontWeight.w400,
                 ),
               ),
 
-              const SizedBox(height: 32),
-
+              SizedBox(height: media.size.height * 0.005), // Pulled up
               // Refresh Button
               Align(
                 alignment: Alignment.center,
@@ -374,8 +396,7 @@ class _WeatherView extends StatelessWidget {
                 ),
               ),
 
-              const SizedBox(height: 36),
-
+              SizedBox(height: media.size.height * 0.015), // Pulled up
               // Additional Info Grid
               Row(
                 children: [
@@ -416,6 +437,38 @@ class _WeatherView extends StatelessWidget {
                   ),
                 ],
               ),
+
+              SizedBox(height: media.size.height * 0.015), // Pulled up
+              // ===================== 7-Day Forecast =====================
+              const Text(
+                '7-DAY FORECAST',
+                style: TextStyle(
+                  color: Colors.white70,
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 1.2,
+                ),
+              ),
+              const SizedBox(height: 12),
+              SizedBox(
+                height: (media.size.height * 0.25).clamp(
+                  215.0,
+                  245.0,
+                ), // Safely balanced height
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: weather.dailyForecasts.length,
+                  separatorBuilder: (_, _) => const SizedBox(width: 12),
+                  itemBuilder: (context, index) {
+                    final forecast = weather.dailyForecasts[index];
+                    final isToday = index == 0;
+                    return _ForecastCard(forecast: forecast, isToday: isToday);
+                  },
+                ),
+              ),
+              SizedBox(
+                height: media.size.height * 0.07,
+              ), // 7% Empty space at bottom
             ],
           ),
         ),
@@ -497,5 +550,81 @@ class _InfoCard extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+// ===================== Forecast Card =====================
+class _ForecastCard extends StatelessWidget {
+  final DailyForecast forecast;
+  final bool isToday;
+
+  const _ForecastCard({required this.forecast, required this.isToday});
+
+  @override
+  Widget build(BuildContext context) {
+    final media = MediaQuery.of(context);
+    return Container(
+      width: (media.size.width * 0.33).clamp(125.0, 160.0), // Wider for balance
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+      decoration: BoxDecoration(
+        // Darker alpha (0.28) for maximum contrast.
+        color: Colors.white.withValues(alpha: 0.28),
+        borderRadius: BorderRadius.circular(22),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            isToday ? 'Today' : _getDayName(forecast.date),
+            style: TextStyle(
+              color: isToday ? Colors.white : Colors.white70,
+              fontSize: (media.size.width * 0.05).clamp(
+                17.0,
+                20.0,
+              ), // Larger responsive
+              fontWeight: isToday ? FontWeight.bold : FontWeight.normal,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            forecast.weatherEmoji,
+            style: TextStyle(
+              fontSize: (media.size.width * 0.12).clamp(
+                44.0,
+                54.0,
+              ), // Larger responsive
+            ),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            '${forecast.maxTemp.round()}°',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: (media.size.width * 0.07).clamp(
+                24.0,
+                30.0,
+              ), // Larger responsive
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Text(
+            '${forecast.minTemp.round()}°',
+            style: TextStyle(
+              color: Colors.white54,
+              fontSize: (media.size.width * 0.055).clamp(
+                20.0,
+                26.0,
+              ), // Larger responsive
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  String _getDayName(DateTime date) {
+    final days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    return days[date.weekday - 1];
   }
 }

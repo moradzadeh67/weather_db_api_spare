@@ -3,7 +3,7 @@
 A professional, offline-first Flutter weather application built using the **SSD (Specification-Driven Development)** methodology and **SPARC** workflow.
 
 ## 📌 Project Overview
-This application provides real-time weather information using a clean, modular architecture. It is designed to be resilient to network issues by implementing a robust local caching system, ensuring users can always access their last viewed weather data.
+This application provides real-time weather information using a clean, modular architecture. It is designed to be resilient to network issues by implementing a robust local caching system, ensuring users can always access their last viewed weather data and upcoming forecasts.
 
 ## 🏗️ Methodology: SSD & SPARC
 This project was developed following the **SSD (Specification-Driven Development)** principles, which prioritize clear definitions and requirements before implementation. The **SPARC** workflow was utilized to ensure a logical and maintainable build process:
@@ -16,10 +16,12 @@ This project was developed following the **SSD (Specification-Driven Development
 
 ## ✨ Key Features
 - 🌐 **Real-time Data**: Integrated with the **Open-Meteo API** (No API Key required).
-- 💾 **Offline-First**: Automatic local storage of weather data and the selected city for instant access without internet.
-- 🏳️ **Country Identity**: Visual identification of cities using dynamic emoji flags in search results and main view.
-- 🔍 **Smart Search**: Custom relevance filtering that prioritizes exact matches and removes irrelevant results.
-- 📱 **Modern UI**: A glassmorphic design featuring adaptive backgrounds that change based on current weather conditions.
+- 📅 **7-Day Forecast**: Detailed upcoming weather predictions with daily max/min temperatures.
+- 💾 **Offline-First**: Automatic local storage of current weather, 7-day forecast, and the selected city for instant access.
+- 🏳️ **Country Identity**: Visual identification of cities using dynamic emoji flags in search results and the main weather view.
+- 🔍 **Smart Search**: Custom relevance filtering that prioritizes exact matches and eliminates irrelevant results.
+- 📱 **Modern & Responsive UI**: A glassmorphic design featuring adaptive backgrounds and a fully responsive layout that scales perfectly across all device sizes.
+- 🌓 **Enhanced Contrast**: Darkened glassmorphic cards for superior text readability on all background themes.
 
 ## 🛠️ Tech Stack
 - **Flutter & Dart**
